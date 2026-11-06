@@ -6,7 +6,10 @@
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { KIT_FILES } from "../scripts/check-kit.mjs";
 
 const read = (f) => readFileSync(f, "utf8");
@@ -54,6 +57,28 @@ test("the brief template fits in project knowledge", { skip: !existsSync("docs/b
   // Lovable's project knowledge holds 10,000 characters. The empty template
   // should leave most of that for your product.
   assert.ok(read("docs/brief-template.md").length < 5000, "brief template is too long");
+});
+
+// Regression test: the build check used to compare a URL to a file path,
+// so in a folder with spaces in its name it skipped itself and passed.
+test("the build check still runs from a folder with spaces in its name", () => {
+  const root = mkdtempSync(join(tmpdir(), "kit-"));
+  const dir = join(root, "kit with spaces");
+  mkdirSync(join(dir, "scripts"), { recursive: true });
+  copyFileSync("scripts/check-kit.mjs", join(dir, "scripts", "check-kit.mjs"));
+
+  try {
+    // No kit files in this folder, and KIT_COMPLETE is set, so it must fail.
+    const run = spawnSync(process.execPath, ["scripts/check-kit.mjs"], {
+      cwd: dir,
+      env: { ...process.env, KIT_COMPLETE: "1" },
+      encoding: "utf8",
+    });
+    assert.equal(run.status, 1, "expected the check to run and fail");
+    assert.match(run.stdout, /missing README\.md/, "expected the check to list missing files");
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
 });
 
 test("no em dashes anywhere (house style)", () => {
