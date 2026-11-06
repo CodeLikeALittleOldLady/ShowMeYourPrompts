@@ -1,0 +1,10 @@
+node_modules/
+coverage/
+
+# Copied in from ../examples by scripts/sync-examples.mjs before every run.
+/vitest.config.ts
+/tests/accessibility.test.tsx
+/eslint-a11y.js
+
+# Left behind only if scripts/check-coverage-gate.mjs is interrupted.
+/src/coverage-probe.tmp.ts

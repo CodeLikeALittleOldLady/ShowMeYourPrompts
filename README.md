@@ -37,6 +37,7 @@ Where this kit and that repository differ, it's usually because I learned someth
 | `examples/vitest.config.ts` | Test settings, with coverage thresholds that fail the build | One Prompt, One Branch, One Review |
 | `examples/eslint-a11y.js` | Accessibility rules for lint, so problems are caught while the code is written | One Prompt, One Branch, One Review |
 | `package.json`, `tests/`, `scripts/` | Makes this kit a tiny Node project, so the same CI runs on the kit itself (see below) | |
+| `sample-app/`, `.github/workflows/examples.yml` | A small React app that runs the `examples/` files on every pull request (see below) | |
 | `GLOSSARY.md` | Every term from the series, in one place | All of them |
 | `LICENSE` | MIT. Copy it, change it, make it yours. | |
 
@@ -116,7 +117,22 @@ Instead of giving the kit a different workflow, I made the kit a tiny Node proje
 - **`npm test`** runs `tests/kit.test.mjs`, using Node's built-in test runner, so there's nothing to install. The tests check that `ruleset.json` is valid, that the check it requires matches the job name in `ci.yml`, that the issue template has what GitHub needs, that the brief template leaves room in project knowledge, and that no file contains an em dash.
 - **`npm run build`** runs `scripts/check-kit.mjs`, which lists any kit files that haven't been added yet.
 
-You don't need these three in your own app. Your app already has a `package.json`, real tests, and a real build.
+You don't need `package.json`, `tests/` or `scripts/` in your own app. Your app already has a `package.json`, real tests, and a real build.
+
+### How the examples get tested
+
+The kit's own tests check its files, but they can't run the examples: those need React, Vitest, axe-core and ESLint, and the kit has none of them. So the kit has a second, small app in `sample-app/`, set up like a Lovable project (React, TypeScript, and the `@` import alias).
+
+Before every run, `sample-app` copies the three `examples/` files to where you'd put them in your own app. Then the `Examples` workflow lints, type-checks and tests it with coverage, and writes the same coverage table as `ci.yml`. If a change to an example breaks it, that pull request gets a red X.
+
+Two checks make sure the examples still do their jobs, not just that they run:
+
+- **Cleanup:** the copy of the accessibility test gets one extra test at the end, which checks the page is empty after the example's test. If the example stops removing each page, this fails.
+- **Coverage gate:** `npm run check:coverage-gate` adds a file that no test imports, runs coverage, and expects that file at 0% and the thresholds to fail. If the config stops counting untested files, this fails. The file is deleted afterwards.
+
+To run it yourself: `cd sample-app`, `npm ci`, then `npm run test:coverage`, `npm run check:coverage-gate`, `npm run lint` or `npm run typecheck`.
+
+You don't need `sample-app/` or `examples.yml` in your own app.
 
 ## The step numbering
 

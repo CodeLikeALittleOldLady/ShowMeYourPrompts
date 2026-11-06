@@ -1,0 +1,40 @@
+{
+  "name": "sample-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A tiny React app that runs the kit's examples/ files, so CI catches an example that stops working.",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "sync": "node scripts/sync-examples.mjs",
+    "pretest": "npm run sync",
+    "test": "vitest run",
+    "pretest:coverage": "npm run sync",
+    "test:coverage": "vitest run --coverage",
+    "prelint": "npm run sync",
+    "lint": "eslint .",
+    "pretypecheck": "npm run sync",
+    "typecheck": "tsc --noEmit",
+    "precheck:coverage-gate": "npm run sync",
+    "check:coverage-gate": "node scripts/check-coverage-gate.mjs"
+  },
+  "dependencies": {
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/react": "^16.3.3",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitest/coverage-v8": "^5.1.0",
+    "axe-core": "^4.14.0",
+    "eslint": "^9.39.5",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "happy-dom": "^21.0.4",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.72.1",
+    "vitest": "^5.1.0"
+  }
+}

@@ -81,6 +81,15 @@ test("the build check still runs from a folder with spaces in its name", () => {
   }
 });
 
+// examples.yml runs the coverage summary from ci.yml on the sample app, so
+// the copy users take gets tested. That only works if the two stay the same.
+test("examples.yml uses the same coverage summary script as ci.yml", { skip: !existsSync(".github/workflows/examples.yml") }, () => {
+  const script = (f) => read(f).match(/node -e '\n([\s\S]*?)\n\s*'\n/)?.[1];
+  const ci = script(".github/workflows/ci.yml");
+  assert.ok(ci, "couldn't find the coverage summary script in ci.yml");
+  assert.equal(script(".github/workflows/examples.yml"), ci, "the coverage summary scripts have drifted apart");
+});
+
 test("no em dashes anywhere (house style)", () => {
   for (const f of present) {
     assert.ok(!read(f).includes("\u2014"), `${f} contains an em dash`);
