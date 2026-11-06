@@ -1,0 +1,82 @@
+# Continuous integration (CI)
+#
+# Runs on every pull request into dev or main.
+# Lints, type-checks, runs the tests with code coverage (including the
+# accessibility tests), and builds the app, so a red X shows up before
+# anything is merged.
+#
+# The job is named "build" because ruleset.json requires a passing check
+# with that name. Rename one, rename both.
+
+name: CI
+
+on:
+  pull_request:
+    branches: [dev, main]
+  workflow_dispatch: # lets you run it by hand from the Actions tab
+
+# The workflow can read the repository, nothing more.
+permissions:
+  contents: read
+
+# If you push again while a run is going, cancel the old run
+# instead of stacking them up.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v7
+
+      # Current versions of Vite need Node 20.19+ or 22.12+.
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint --if-present
+
+      - name: Type-check
+        run: npm run typecheck --if-present
+
+      # Fails if coverage drops below the thresholds in vitest.config.ts.
+      # The accessibility tests run here too.
+      - name: Test with coverage
+        run: npm run test:coverage --if-present
+
+      # Writes a coverage table onto the run's summary page, so you can see
+      # the numbers without downloading anything. Needs "json-summary" in the
+      # coverage reporters (see examples/vitest.config.ts).
+      - name: Summarize coverage
+        if: ${{ always() && hashFiles('coverage/coverage-summary.json') != '' }}
+        run: |
+          node -e '
+            const { appendFileSync, readFileSync } = require("node:fs");
+            const { total } = JSON.parse(readFileSync("coverage/coverage-summary.json", "utf8"));
+            const metrics = ["statements", "branches", "functions", "lines"];
+            const rows = metrics.map(m => `| ${m} | ${total[m].pct}% |`);
+            appendFileSync(process.env.GITHUB_STEP_SUMMARY, [
+              "## Coverage", "", "| Metric | Total |", "| --- | ---: |", ...rows, ""
+            ].join("\n"));
+          '
+
+      - name: Build
+        run: npm run build
+
+      - name: Save the coverage report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-report
+          path: coverage/
+          if-no-files-found: ignore

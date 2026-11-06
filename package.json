@@ -1,0 +1,16 @@
+{
+  "name": "show-me-your-prompts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Starter kit from the Show Me Your Prompts series. This kit has no app, so its tests and build check the kit's own files.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test \"tests/*.test.mjs\"",
+    "test:coverage": "node --test \"tests/*.test.mjs\"",
+    "build": "node scripts/check-kit.mjs"
+  }
+}
