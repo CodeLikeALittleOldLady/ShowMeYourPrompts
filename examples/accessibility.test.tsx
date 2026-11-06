@@ -9,12 +9,18 @@
 //   Copy this file into your tests folder and change the import
 //   below to a page from your app. Add one test per page.
 
-import { render } from "@testing-library/react";
+import { cleanup, render } from "@testing-library/react";
 import axe from "axe-core";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 
 // Change this to a page in your app.
 import HomePage from "../src/pages/HomePage";
+
+// Remove each page after its test. Testing Library only does this on its
+// own when Vitest globals are turned on, and the example config leaves
+// them off. Without it, earlier pages stay on screen, and a check against
+// document.body (like a dialog test) would audit those old pages too.
+afterEach(cleanup);
 
 async function findViolations(container: HTMLElement) {
   const results = await axe.run(container, {
