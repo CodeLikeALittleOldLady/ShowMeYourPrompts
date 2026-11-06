@@ -1,0 +1,58 @@
+# Glossary
+
+Every term from *Show Me Your Prompts*, in alphabetical order.
+
+- **Accessibility (A11y):** making sure an app works for everyone, including people using screen readers or keyboards. A11y is shorthand for the 11 letters between the a and the y.
+- **Admin (administrator):** the person who runs the site, blocking spam, clearing issues, and keeping things running
+- **Anonymize:** to remove anything that connects data to a specific person
+- **Bot:** an automated account that acts on its own, like a named reviewer leaving comments
+- **Branch:** a separate copy of the project where you can make changes without touching the main version
+- **Brief:** a written description of the product. Names, fields, limits, rules. No code.
+- **Check in:** saving your changes to the repository
+- **Code coverage:** how much of your code is exercised by your automated tests
+- **Code review:** someone else reading your changes before they're merged, looking for problems
+- **Commit:** a saved set of changes in a branch
+- **Continuous integration (CI):** automatically building and testing every change as soon as it's submitted
+- **Dev branch:** the working branch. What it holds is what you see on the preview site.
+- **Diff:** the lines that changed between two versions of the code
+- **End to end (E2E):** the full journey through the app, from first screen to last
+- **Entity:** one kind of thing the database stores, like a plate, a story, or a user
+- **ERD (entity relationship diagram):** a picture of the entities and how they connect
+- **Feature branch:** a short-lived branch for one piece of work, named for its step
+- **GitHub:** a website for storing projects, their history, and the work planned for them
+- **GitHub Copilot (GHCP):** GitHub's built-in AI assistant, which can review pull requests
+- **Hello world:** the simplest possible starter program, traditionally a page that just says hello
+- **Hero image:** the large image at the top of a page
+- **Issue:** a single task tracked in GitHub. In this series, each issue is one step.
+- **Label:** a tag on an issue that tells you something about it at a glance. Mine say who does the work.
+- **Memory:** what an AI partner picks up over time from working with you
+- **Merge:** bringing the changes from one branch into another
+- **Merge conflict:** when two branches change the same lines differently, and someone has to decide which version wins
+- **Milestone:** a group of issues that together complete something larger
+- **Palette:** the set of colors a design is allowed to use
+- **Preview site:** a private copy of your site built from the dev branch, for checking work before publishing
+- **Production:** the live version of your app, the one the world sees
+- **Project knowledge:** the place in Lovable where the brief lives, read with every prompt
+- **Prompt:** the instructions you give an AI to do a piece of work
+- **Proof of concept:** a quick, rough build to see whether an idea works
+- **Publish:** to make the site live for everyone, built from the main branch
+- **Pull request:** a request to move changes from one branch into another, so they can be checked and reviewed first
+- **Push:** sending your commits up to GitHub
+- **Regenerate:** when an AI image tool redraws the whole image instead of changing one part
+- **Regression:** an error in something that was previously working
+- **Release:** sending a finished set of changes out to production
+- **Remix:** Lovable's way of starting a new project from an existing one
+- **Repository (repo):** where a project's files and history live in GitHub
+- **Role:** a label on an account, like admin, that decides what that person can see and do
+- **Ruleset:** a set of GitHub rules protecting a branch, such as requiring a pull request for every change
+- **Sandbox:** a safe, separate space to run code without affecting anything real
+- **Schema:** the blueprint for a database: what things it stores and how they connect
+- **Seed data:** a starting set of data loaded into a new database
+- **Source code management (SCM):** a system for storing code and tracking every change to it
+- **Static page:** a page that looks real but doesn't do anything yet
+- **Storyboard:** the set of screens showing how a user moves from page to page
+- **Telemetry:** data an app collects about how it's used and what it was doing when something went wrong
+- **Test harness:** the automated tests and checks that run on every change to confirm nothing broke
+- **Token:** the unit AI tools use to measure text, and often to charge for it
+- **Vibe coding:** building software mostly by directing AI in plain language rather than writing code yourself
+- **Visual guide:** a single page showing every color, style, and component the app uses
